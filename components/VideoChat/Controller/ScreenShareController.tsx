@@ -3,9 +3,9 @@ import {
   useHMSActions,
   useHMSStore,
 } from "@100mslive/react-sdk";
-import { Switch } from "@chakra-ui/react";
+import { Flex, Switch, Text } from "@chakra-ui/react";
 
-export const ScreenShareController: React.FC = () => {
+export const ScreenShareController = () => {
   const hmsActions = useHMSActions();
   const amIScreenSharing = useHMSStore(selectIsLocalScreenShared);
 
@@ -18,21 +18,14 @@ export const ScreenShareController: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col items-center gap-1">
-      <span>Share Screen</span>
+    <Flex flexDirection="column" alignItems="center" gap="1">
+      <Text fontSize="md">Share Screen</Text>
       <Switch
         isChecked={amIScreenSharing}
         onChange={handleToggleShareScreen}
-        className={`${
-          amIScreenSharing ? "bg-blue-600" : "bg-gray-200"
-        } focus:outline-none relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2`}
-      >
-        <span
-          className={`${
-            amIScreenSharing ? "translate-x-6" : "translate-x-1"
-          } inline-block h-4 w-4 transform rounded-full bg-white transition-transform`}
-        />
-      </Switch>
-    </div>
+        colorScheme={amIScreenSharing ? "blue" : "gray"}
+        size="sm"
+      />
+    </Flex>
   );
 };
