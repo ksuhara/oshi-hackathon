@@ -1,5 +1,13 @@
 import { useHMSActions } from "@100mslive/react-sdk";
-import { Input } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Container,
+  FormLabel,
+  Heading,
+  Input,
+  Stack,
+} from "@chakra-ui/react";
 import { ChangeEvent, FormEvent, useState } from "react";
 
 export const JoinForm: React.FC = () => {
@@ -18,20 +26,33 @@ export const JoinForm: React.FC = () => {
     });
   };
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>Join Room</h2>
-      <div>
-        <label htmlFor="user_name">User Name:</label>
-        <Input
-          type="text"
-          id="user_name"
-          name="name"
-          required
-          value={userName}
-          onChange={handleChange}
-        />
-      </div>
-      <button type="submit">Join</button>
-    </form>
+    <Box bgColor="gray.900" height="100vh">
+      <Container>
+        <Stack>
+          <Heading mx="auto" mt="16" color="white">
+            Join Room
+          </Heading>
+
+          <form onSubmit={handleSubmit}>
+            <div>
+              <FormLabel textColor="white">User Name</FormLabel>
+              <Input
+                type="text"
+                id="user_name"
+                name="name"
+                required
+                value={userName}
+                onChange={handleChange}
+              />
+            </div>
+            <Box width="full" textAlign="center">
+              <Button type="submit" mt="4">
+                Join
+              </Button>
+            </Box>
+          </form>
+        </Stack>
+      </Container>
+    </Box>
   );
 };
