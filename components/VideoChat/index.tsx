@@ -7,12 +7,7 @@ export const VideoChat: React.FC = () => {
   const peers = useHMSStore(selectPeers);
 
   return (
-    <Box
-      height="100vh"
-      backgroundColor="gray.900"
-      display="flex"
-      flexDirection="column"
-    >
+    <Box minH="100vh" backgroundColor="gray.900">
       <Grid gridAutoFlow="column" flex="1" gap="4" p="8">
         {peers.map((peer) => (
           <Peer key={peer.id} peer={peer} />

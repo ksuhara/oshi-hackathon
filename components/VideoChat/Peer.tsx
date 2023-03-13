@@ -26,7 +26,6 @@ export const Peer: React.FC<Props> = ({ peer }) => {
     >
       <video
         ref={videoRef}
-        className="rounded-md"
         autoPlay
         muted
         playsInline

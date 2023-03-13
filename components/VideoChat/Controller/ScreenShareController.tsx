@@ -3,7 +3,8 @@ import {
   useHMSActions,
   useHMSStore,
 } from "@100mslive/react-sdk";
-import { Flex, Switch, Text } from "@chakra-ui/react";
+import { IconButton } from "@chakra-ui/react";
+import { MdScreenShare, MdStopScreenShare } from "react-icons/md";
 
 export const ScreenShareController = () => {
   const hmsActions = useHMSActions();
@@ -18,14 +19,10 @@ export const ScreenShareController = () => {
   };
 
   return (
-    <Flex flexDirection="column" alignItems="center" gap="1">
-      <Text fontSize="md">Share Screen</Text>
-      <Switch
-        isChecked={amIScreenSharing}
-        onChange={handleToggleShareScreen}
-        colorScheme={amIScreenSharing ? "blue" : "gray"}
-        size="sm"
-      />
-    </Flex>
+    <IconButton
+      aria-label="screen share"
+      icon={amIScreenSharing ? <MdStopScreenShare /> : <MdScreenShare />}
+      onClick={handleToggleShareScreen}
+    ></IconButton>
   );
 };

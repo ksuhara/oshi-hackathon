@@ -1,8 +1,8 @@
 import { useHMSActions } from "@100mslive/react-sdk";
-import { Button } from "@chakra-ui/react";
-import type { VFC } from "react";
+import { IconButton } from "@chakra-ui/react";
+import { ImPhoneHangUp } from "react-icons/im";
 
-export const LeaveButton: VFC = () => {
+export const LeaveButton: React.FC = () => {
   const hmsActions = useHMSActions();
 
   const handleClick = () => {
@@ -10,14 +10,15 @@ export const LeaveButton: VFC = () => {
   };
 
   return (
-    <Button
+    <IconButton
       onClick={handleClick}
-      backgroundColor="red.600"
+      bgColor="red.600"
+      rounded="full"
       color="white"
-      rounded="lg"
+      size="lg"
       shadow="lg"
-    >
-      Leave
-    </Button>
+      icon={<ImPhoneHangUp />}
+      aria-label="Leave call"
+    ></IconButton>
   );
 };

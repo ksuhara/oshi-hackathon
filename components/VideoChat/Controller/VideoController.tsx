@@ -15,7 +15,6 @@ import {
   PopoverContent,
   PopoverHeader,
   PopoverTrigger,
-  Switch,
 } from "@chakra-ui/react";
 
 export const VideoController: React.FC = () => {
@@ -60,19 +59,6 @@ export const VideoController: React.FC = () => {
           </PopoverBody>
         </PopoverContent>
       </Popover>
-      <Switch
-        isChecked={isLocalVideoEnabled}
-        onChange={toggleVideo ?? (() => {})}
-        className={`${
-          isLocalVideoEnabled ? "bg-blue-600" : "bg-gray-200"
-        } focus:outline-none relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2`}
-      >
-        <span
-          className={`${
-            isLocalVideoEnabled ? "translate-x-6" : "translate-x-1"
-          } inline-block h-4 w-4 transform rounded-full bg-white transition-transform`}
-        />
-      </Switch>
     </div>
   );
 };

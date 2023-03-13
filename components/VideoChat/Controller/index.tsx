@@ -1,22 +1,26 @@
-import { Grid, GridItem } from "@chakra-ui/react";
+import { Box, Container, Stack } from "@chakra-ui/react";
 import { AudioController } from "./AudioController";
 import { LeaveButton } from "./LeaveButton";
+import { MicButton } from "./MicButton";
 import { ScreenShareController } from "./ScreenShareController";
+import { VideoButton } from "./VideoButton";
 import { VideoController } from "./VideoController";
 
 export const Controller: React.FC = () => {
   return (
-    <Grid templateColumns="repeat(3, 1fr)" px="2" py="4" bg="gray.300">
-      <GridItem colSpan={2} justifyContent="center" alignItems="center" py="2">
+    <Box bg="gray.300" minH="50vh">
+      <Container textAlign="center" mt="8">
+        <Stack direction="row" width="full" textAlign="center">
+          <MicButton />
+          <LeaveButton />
+          <VideoButton />
+          <ScreenShareController />
+        </Stack>
+      </Container>
+      <Container>
         <AudioController />
         <VideoController />
-      </GridItem>
-      <GridItem justifyContent="center" alignItems="center" py="2">
-        <ScreenShareController />
-      </GridItem>
-      <GridItem justifyContent="center" alignItems="center" py="2">
-        <LeaveButton />
-      </GridItem>
-    </Grid>
+      </Container>
+    </Box>
   );
 };
