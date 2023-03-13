@@ -29,7 +29,7 @@ export const Peer: React.FC<Props> = ({ peer }) => {
         autoPlay
         muted
         playsInline
-        style={{ transform: "scaleX(-1)" }}
+        style={{ transform: "scaleX(-1)", maxHeight: "70vh" }}
       />
       <Text color="white">
         {peer.name} {peer.isLocal && "(You)"}
