@@ -13,13 +13,19 @@
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
+    "@thirdweb-dev/auth": "^3.0.7",
+    "@thirdweb-dev/react": "^3.10.3",
+    "@thirdweb-dev/sdk": "^3.10.3",
     "@types/jest": "^25.2.3",
     "@types/react-dom": "^18.0.6",
     "apexcharts": "^3.35.2",
+    "firebase": "^9.17.2",
+    "firebase-admin": "^11.5.0",
     "framer-motion": "^4.1.17",
     "next": "^12.2.5",
     "react": "^17.0.2",
     "react-apexcharts": "^1.4.0",
+    "react-blockies": "^1.4.1",
     "react-calendar": "^3.7.0",
     "react-custom-scrollbars-2": "^4.2.1",
     "react-dom": "17.0.2",
@@ -41,7 +47,11 @@
     "deploy": "gh-pages -d build"
   },
   "browserslist": {
-    "production": [">0.2%", "not dead", "not op_mini all"],
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",
@@ -51,6 +61,7 @@
   "devDependencies": {
     "@types/node": "^18.7.6",
     "@types/react": "^18.0.17",
+    "@types/react-blockies": "^1.4.1",
     "@types/react-calendar": "^3.5.2",
     "@types/react-table": "^7.7.12",
     "eslint": "^8.23.0",

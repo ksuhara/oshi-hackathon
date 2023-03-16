@@ -1,4 +1,5 @@
 import { ChakraProvider } from "@chakra-ui/react";
+import { ThirdwebProvider } from "@thirdweb-dev/react";
 import { AppProps } from "next/app";
 import React from "react";
 import theme from "theme/theme";
@@ -19,9 +20,15 @@ function MyApp({ Component, pageProps }: AppProps) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#000000" />
       </Head>
-      <React.StrictMode>
-        <Component {...pageProps} />
-      </React.StrictMode>
+      <ThirdwebProvider
+        authConfig={{
+          domain: process.env.NEXT_PUBLIC_THIRDWEB_AUTH_DOMAIN as string,
+        }}
+      >
+        <React.StrictMode>
+          <Component {...pageProps} />
+        </React.StrictMode>
+      </ThirdwebProvider>
     </ChakraProvider>
   );
 }
