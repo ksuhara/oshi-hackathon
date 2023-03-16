@@ -66,13 +66,17 @@ export default function NftMarketplace() {
         {/* Main Fields */}
         <Grid
           mb="20px"
-          gridTemplateColumns={{ xl: "repeat(3, 1fr)", "2xl": "1fr 0.46fr" }}
+          // gridTemplateColumns={{ xl: "repeat(3, 1fr)", "2xl": "1fr 0.46fr" }}
           gap={{ base: "20px", xl: "20px" }}
           display={{ base: "block", xl: "grid" }}
         >
           <Flex
             flexDirection="column"
-            gridArea={{ xl: "1 / 1 / 2 / 3", "2xl": "1 / 1 / 2 / 2" }}
+            // gridArea={{
+            //   xl: "1 / 1 / 3 / 3",
+            //   "2xl": "1 / 1 / 3 / 3",
+            // }}
+            width="100%"
           >
             <Banner />
             <Flex direction="column">
@@ -89,7 +93,7 @@ export default function NftMarketplace() {
                   ms="24px"
                   fontWeight="700"
                 >
-                  Trending NFTs
+                  Trending Projects
                 </Text>
                 <Flex
                   align="center"
@@ -184,78 +188,11 @@ export default function NftMarketplace() {
                   download="#"
                 />
               </SimpleGrid>
-              <Text
-                mt="45px"
-                mb="36px"
-                color={textColor}
-                fontSize="2xl"
-                ms="24px"
-                fontWeight="700"
-              >
-                Recently Added
-              </Text>
-              <SimpleGrid
-                columns={{ base: 1, md: 3 }}
-                gap="20px"
-                mb={{ base: "20px", xl: "0px" }}
-              >
-                <NFT
-                  name="Swipe Circles"
-                  author="By Peter Will"
-                  bidders={[
-                    Avatar1,
-                    Avatar2,
-                    Avatar3,
-                    Avatar4,
-                    Avatar1,
-                    Avatar1,
-                    Avatar1,
-                    Avatar1,
-                  ]}
-                  image={Nft4}
-                  currentbid="0.91 ETH"
-                  download="#"
-                />
-                <NFT
-                  name="Colorful Heaven"
-                  author="By Mark Benjamin"
-                  bidders={[
-                    Avatar1,
-                    Avatar2,
-                    Avatar3,
-                    Avatar4,
-                    Avatar1,
-                    Avatar1,
-                    Avatar1,
-                    Avatar1,
-                  ]}
-                  image={Nft5}
-                  currentbid="0.91 ETH"
-                  download="#"
-                />
-                <NFT
-                  name="3D Cubes Art"
-                  author="By Manny Gates"
-                  bidders={[
-                    Avatar1,
-                    Avatar2,
-                    Avatar3,
-                    Avatar4,
-                    Avatar1,
-                    Avatar1,
-                    Avatar1,
-                    Avatar1,
-                  ]}
-                  image={Nft6}
-                  currentbid="0.91 ETH"
-                  download="#"
-                />
-              </SimpleGrid>
             </Flex>
           </Flex>
           <Flex
             flexDirection="column"
-            gridArea={{ xl: "1 / 3 / 2 / 4", "2xl": "1 / 2 / 2 / 3" }}
+            // gridArea={{ xl: "1 / 3 / 2 / 4", "2xl": "1 / 2 / 2 / 3" }}
           >
             <Card px="0px" mb="20px">
               <TableTopCreators
