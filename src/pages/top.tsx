@@ -37,7 +37,6 @@ import Card from "components/card/Card";
 import NFT from "components/card/NFT";
 import Banner from "views/admin/marketplace/components/Banner";
 import HistoryItem from "views/admin/marketplace/components/HistoryItem";
-import TableTopCreators from "views/admin/marketplace/components/TableTopCreators";
 
 // Assets
 import Avatar1 from "img/avatars/avatar1.png";
@@ -52,9 +51,6 @@ import Nft5 from "img/nfts/Nft5.png";
 import Nft6 from "img/nfts/Nft6.png";
 import AdminLayout from "layouts/admin";
 import NextLink from "next/link";
-import { TableData } from "views/admin/default/variables/columnsData";
-import { tableColumnsTopCreators } from "views/admin/marketplace/variables/tableColumnsTopCreators";
-import tableDataTopCreators from "views/admin/marketplace/variables/tableDataTopCreators.json";
 
 export default function NftMarketplace() {
   // Chakra Color Mode
@@ -194,12 +190,12 @@ export default function NftMarketplace() {
             flexDirection="column"
             // gridArea={{ xl: "1 / 3 / 2 / 4", "2xl": "1 / 2 / 2 / 3" }}
           >
-            <Card px="0px" mb="20px">
+            {/* <Card px="0px" mb="20px">
               <TableTopCreators
                 tableData={tableDataTopCreators as unknown as TableData[]}
                 columnsData={tableColumnsTopCreators}
               />
-            </Card>
+            </Card> */}
             <Card p="0px">
               <Flex
                 align={{ sm: "flex-start", lg: "center" }}
@@ -209,7 +205,7 @@ export default function NftMarketplace() {
                 py="18px"
               >
                 <Text color={textColor} fontSize="xl" fontWeight="600">
-                  History
+                  On-Going Projects
                 </Text>
                 <Button variant="action">See all</Button>
               </Flex>
@@ -220,6 +216,8 @@ export default function NftMarketplace() {
                 date="30s ago"
                 image={Nft5}
                 price="0.91 ETH"
+                winOdds={1.3}
+                loseOdds={4.2}
               />
               <HistoryItem
                 name="Abstract Colors"
@@ -227,6 +225,8 @@ export default function NftMarketplace() {
                 date="58s ago"
                 image={Nft1}
                 price="0.91 ETH"
+                winOdds={1.3}
+                loseOdds={4.2}
               />
               <HistoryItem
                 name="ETH AI Brain"
@@ -234,6 +234,8 @@ export default function NftMarketplace() {
                 date="1m ago"
                 image={Nft2}
                 price="0.91 ETH"
+                winOdds={1.3}
+                loseOdds={4.2}
               />
               <HistoryItem
                 name="Swipe Circles"
@@ -241,6 +243,8 @@ export default function NftMarketplace() {
                 date="1m ago"
                 image={Nft4}
                 price="0.91 ETH"
+                winOdds={1.3}
+                loseOdds={4.2}
               />
               <HistoryItem
                 name="Mesh Gradients "
@@ -248,6 +252,8 @@ export default function NftMarketplace() {
                 date="2m ago"
                 image={Nft3}
                 price="0.91 ETH"
+                winOdds={1.3}
+                loseOdds={4.2}
               />
               <HistoryItem
                 name="3D Cubes Art"
@@ -255,11 +261,12 @@ export default function NftMarketplace() {
                 date="3m ago"
                 image={Nft6}
                 price="0.91 ETH"
+                winOdds={1.3}
+                loseOdds={4.2}
               />
             </Card>
           </Flex>
         </Grid>
-        {/* Delete Product */}
       </Box>
     </AdminLayout>
   );
