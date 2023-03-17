@@ -4,6 +4,7 @@ import {
   Button,
   Flex,
   Icon,
+  Link,
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
@@ -21,8 +22,10 @@ export default function NFT(props: {
   price: string | number;
   winOdds: string | number;
   loseOdds: string | number;
+  projectId: string;
 }) {
-  const { image, name, author, date, price, winOdds, loseOdds } = props;
+  const { image, name, author, date, price, winOdds, loseOdds, projectId } =
+    props;
   // Chakra Color Mode
   const textColor = useColorModeValue("brands.900", "white");
   const bgItem = useColorModeValue(
@@ -64,7 +67,7 @@ export default function NFT(props: {
               fontWeight="bold"
               me="14px"
             >
-              {name}
+              <Link href={`project/${projectId}`}>{name}</Link>
             </Text>
             <Text
               color="secondaryGray.600"

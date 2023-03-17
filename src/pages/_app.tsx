@@ -10,6 +10,7 @@ import "styles/Fonts.css";
 
 import Head from "next/head";
 import "react-calendar/dist/Calendar.css";
+import "react-datepicker/dist/react-datepicker.css";
 import "styles/MiniCalendar.css";
 
 function MyApp({ Component, pageProps }: AppProps) {

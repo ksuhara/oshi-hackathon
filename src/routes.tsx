@@ -1,10 +1,8 @@
 import { Icon } from "@chakra-ui/react";
 import { AiOutlineStock } from "react-icons/ai";
-import { MdBarChart, MdHome, MdPerson } from "react-icons/md";
+import { IoCreateSharp } from "react-icons/io5";
 // Admin Imports
-import DataTables from "pages/data-tables";
-import MainDashboard from "pages/default";
-import Profile from "pages/profile";
+import CreateProject from "pages/create-project";
 import NFTMarketplace from "pages/top";
 
 // Auth Imports
@@ -13,7 +11,7 @@ import { IRoute } from "types/navigation";
 const routes: IRoute[] = [
   {
     name: "Top",
-    layout: "/",
+    layout: "",
     path: "/top",
     icon: (
       <Icon as={AiOutlineStock} width="20px" height="20px" color="inherit" />
@@ -22,26 +20,13 @@ const routes: IRoute[] = [
     secondary: true,
   },
   {
-    name: "Main Dashboard",
-    layout: "/",
-    path: "/default",
-    icon: <Icon as={MdHome} width="20px" height="20px" color="inherit" />,
-    component: MainDashboard,
-  },
-
-  {
-    name: "Data Tables",
-    layout: "/",
-    icon: <Icon as={MdBarChart} width="20px" height="20px" color="inherit" />,
-    path: "/data-tables",
-    component: DataTables,
-  },
-  {
-    name: "Profile",
-    layout: "/",
-    path: "/profile",
-    icon: <Icon as={MdPerson} width="20px" height="20px" color="inherit" />,
-    component: Profile,
+    name: "Create Project",
+    layout: "",
+    path: "/create-project",
+    icon: (
+      <Icon as={IoCreateSharp} width="20px" height="20px" color="inherit" />
+    ),
+    component: CreateProject,
   },
 ];
 

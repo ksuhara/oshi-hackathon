@@ -12,7 +12,7 @@ export function SidebarBrand() {
   return (
     <Flex alignItems="center" flexDirection="column">
       {/* <HorizonLogo h="26px" w="175px" my="32px" color={logoColor} /> */}
-      <Text fontWeight="extrabold" fontSize="3xl" my="32px">
+      <Text fontWeight="extrabold" fontSize="3xl" my="32px" pr="8">
         Paddock.io
       </Text>
       <HSeparator mb="20px" />

@@ -23,7 +23,6 @@
 // Chakra imports
 import {
   Box,
-  Button,
   Flex,
   Grid,
   Link,
@@ -39,6 +38,7 @@ import Banner from "views/admin/marketplace/components/Banner";
 import HistoryItem from "views/admin/marketplace/components/HistoryItem";
 
 // Assets
+import { collection, getDocs, query, where } from "@firebase/firestore";
 import Avatar1 from "img/avatars/avatar1.png";
 import Avatar2 from "img/avatars/avatar2.png";
 import Avatar3 from "img/avatars/avatar3.png";
@@ -46,16 +46,35 @@ import Avatar4 from "img/avatars/avatar4.png";
 import Nft1 from "img/nfts/Nft1.png";
 import Nft2 from "img/nfts/Nft2.png";
 import Nft3 from "img/nfts/Nft3.png";
-import Nft4 from "img/nfts/Nft4.png";
 import Nft5 from "img/nfts/Nft5.png";
-import Nft6 from "img/nfts/Nft6.png";
 import AdminLayout from "layouts/admin";
+import initializeFirebaseClient from "lib/initFirebase";
 import NextLink from "next/link";
+import { useEffect, useState } from "react";
 
 export default function NftMarketplace() {
   // Chakra Color Mode
   const textColor = useColorModeValue("secondaryGray.900", "white");
   const textColorBrand = useColorModeValue("brand.500", "white");
+
+  const [projectsData, setProjectsData] = useState<any[]>();
+  const { db } = initializeFirebaseClient();
+
+  useEffect(() => {
+    const projectsQuery = query(
+      collection(db, "projects"),
+      where("goalDate", ">=", new Date())
+    );
+    const fetch = async () => {
+      let extractData: any = [];
+      const querySnapshot = await getDocs(projectsQuery);
+      querySnapshot.forEach((doc) => {
+        extractData.push({ ...doc.data(), uid: doc.id });
+      });
+      setProjectsData(extractData);
+    };
+    fetch();
+  }, [db]);
   return (
     <AdminLayout>
       <Box pt={{ base: "180px", md: "80px", xl: "80px" }}>
@@ -207,18 +226,22 @@ export default function NftMarketplace() {
                 <Text color={textColor} fontSize="xl" fontWeight="600">
                   On-Going Projects
                 </Text>
-                <Button variant="action">See all</Button>
               </Flex>
-
-              <HistoryItem
-                name="Colorful Heaven"
-                author="By Mark Benjamin"
-                date="30s ago"
-                image={Nft5}
-                price="0.91 ETH"
-                winOdds={1.3}
-                loseOdds={4.2}
-              />
+              {projectsData?.map((project) => {
+                return (
+                  <HistoryItem
+                    key={project.uid}
+                    name={project.name}
+                    author="By Mark Benjamin"
+                    date={project.goalDate.toDate().toLocaleDateString()}
+                    image={Nft5}
+                    price="0.91 ETH"
+                    winOdds={1.3}
+                    loseOdds={4.2}
+                    projectId={project.uid}
+                  />
+                );
+              })}
               <HistoryItem
                 name="Abstract Colors"
                 author="By Esthera Jackson"
@@ -227,6 +250,7 @@ export default function NftMarketplace() {
                 price="0.91 ETH"
                 winOdds={1.3}
                 loseOdds={4.2}
+                projectId={"2"}
               />
               <HistoryItem
                 name="ETH AI Brain"
@@ -236,33 +260,7 @@ export default function NftMarketplace() {
                 price="0.91 ETH"
                 winOdds={1.3}
                 loseOdds={4.2}
-              />
-              <HistoryItem
-                name="Swipe Circles"
-                author="By Peter Will"
-                date="1m ago"
-                image={Nft4}
-                price="0.91 ETH"
-                winOdds={1.3}
-                loseOdds={4.2}
-              />
-              <HistoryItem
-                name="Mesh Gradients "
-                author="By Will Smith"
-                date="2m ago"
-                image={Nft3}
-                price="0.91 ETH"
-                winOdds={1.3}
-                loseOdds={4.2}
-              />
-              <HistoryItem
-                name="3D Cubes Art"
-                author="By Manny Gates"
-                date="3m ago"
-                image={Nft6}
-                price="0.91 ETH"
-                winOdds={1.3}
-                loseOdds={4.2}
+                projectId={"3"}
               />
             </Card>
           </Flex>

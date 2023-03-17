@@ -13,7 +13,7 @@ export default function Banner() {
       direction="column"
       // bgImage={banner}
       bgSize="cover"
-      py={{ base: "30px", md: "56px" }}
+      py={{ base: "30px", md: "48px" }}
       px={{ base: "30px", md: "64px" }}
       borderRadius="30px"
     >
