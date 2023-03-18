@@ -8,6 +8,7 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
+import { useContract, useContractRead } from "@thirdweb-dev/react";
 // Custom components
 import Card from "components/card/Card";
 // Assets
@@ -33,6 +34,13 @@ export default function NFT(props: {
     { bg: "navy.700", boxShadow: "unset" }
   );
   const textColorDate = useColorModeValue("secondaryGray.600", "white");
+
+  const { contract } = useContract(
+    "0x0BB2c97f9F733798833510083d9f432296b6DD00"
+  );
+
+  const { data } = useContractRead(contract, "projects", projectId);
+
   return (
     <Card
       _hover={bgItem}
@@ -77,7 +85,7 @@ export default function NFT(props: {
               fontWeight="400"
               me="14px"
             >
-              {author}
+              by {data?.creator}
             </Text>
           </Flex>
           <Button
@@ -90,7 +98,7 @@ export default function NFT(props: {
             px="24px"
             py="5px"
           >
-            × {winOdds}
+            × {data?.totalBetOnSuccess.toString()}
           </Button>
           <Button
             variant="darkBrand"

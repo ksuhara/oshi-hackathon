@@ -7,6 +7,11 @@ import {
   useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
+import {
+  useContract,
+  useContractRead,
+  useContractWrite,
+} from "@thirdweb-dev/react";
 import Card from "components/card/Card";
 import ChakraDatePicker from "components/datePicker/datePicker";
 import InputField from "components/fields/InputField";
@@ -19,8 +24,18 @@ export default function CreateProject() {
   const [description, setDescription] = useState("");
   const [projectGoal, setProjectGoal] = useState("");
   const [goalDate, setGoalDate] = useState(new Date());
+  const [isTxLoading, setIsTxLoading] = useState(false);
 
   const toast = useToast();
+  const { contract } = useContract(
+    "0x0BB2c97f9F733798833510083d9f432296b6DD00"
+  );
+  const { data: projectCounter } = useContractRead(contract, "projectCounter");
+
+  const { mutateAsync: createProject } = useContractWrite(
+    contract,
+    "createProject"
+  );
 
   const handleProjectNameChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -44,8 +59,25 @@ export default function CreateProject() {
     setGoalDate(date);
   };
 
-  const createProject = async () => {
-    if (!projectName || !description || !projectGoal || !goalDate) return;
+  const handleCreateProject = async () => {
+    if (
+      !projectName ||
+      !description ||
+      !projectGoal ||
+      !goalDate ||
+      !projectCounter
+    )
+      return;
+    setIsTxLoading(true);
+    const nextNumber = projectCounter.toNumber() + 1;
+    try {
+      const data = await createProject([]);
+      console.info("contract call successs", data);
+    } catch (err) {
+      console.error("contract call failure", err);
+      setIsTxLoading(false);
+      return;
+    }
     const response = await fetch(`/api/create-project`, {
       method: "POST",
       body: JSON.stringify({
@@ -53,13 +85,14 @@ export default function CreateProject() {
         description,
         goalDate,
         goal: projectGoal,
+        projectCounter: nextNumber,
       }),
     });
     const result = await response.json();
-
+    setIsTxLoading(false);
     if (response.ok) {
       toast({
-        title: "Projectが作成されました！",
+        title: "Project Created!",
         status: "success",
         isClosable: true,
       });
@@ -129,7 +162,11 @@ export default function CreateProject() {
 
               <ChakraDatePicker onChange={handleDateChange}></ChakraDatePicker>
             </Box>
-            <Button variant="brand" onClick={createProject}>
+            <Button
+              variant="brand"
+              onClick={handleCreateProject}
+              isLoading={isTxLoading}
+            >
               Create Project
             </Button>
           </Card>

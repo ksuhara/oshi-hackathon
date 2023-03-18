@@ -1,5 +1,5 @@
 import { ChakraProvider } from "@chakra-ui/react";
-import { ThirdwebProvider } from "@thirdweb-dev/react";
+import { ChainId, ThirdwebProvider } from "@thirdweb-dev/react";
 import { AppProps } from "next/app";
 import React from "react";
 import theme from "theme/theme";
@@ -25,6 +25,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         authConfig={{
           domain: process.env.NEXT_PUBLIC_THIRDWEB_AUTH_DOMAIN as string,
         }}
+        activeChain={ChainId.Mumbai}
       >
         <React.StrictMode>
           <Component {...pageProps} />

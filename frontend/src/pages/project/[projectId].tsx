@@ -22,6 +22,7 @@
 
 import {
   Box,
+  Button,
   Flex,
   FormLabel,
   Heading,
@@ -29,13 +30,17 @@ import {
   Select,
   SimpleGrid,
   useColorModeValue,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { doc, getDoc } from "@firebase/firestore";
+import { useContract, useContractRead } from "@thirdweb-dev/react";
 // Assets
 // Custom components
 import MiniStatistics from "components/card/MiniStatistics";
 import IconBox from "components/icons/IconBox";
 import { Image } from "components/image/Image";
+import BetModal from "components/modal/betModal";
+import { ethers } from "ethers";
 import Usa from "img/dashboards/usa.png";
 import AdminLayout from "layouts/admin";
 import initializeFirebaseClient from "lib/initFirebase";
@@ -67,6 +72,14 @@ export default function ProjectDetail() {
   const { projectId } = router.query;
   const { db } = initializeFirebaseClient();
   const [projectData, setProjectData] = useState<any>();
+  const [betPosition, setBetPosition] = useState(true);
+
+  const { contract } = useContract(
+    "0x0BB2c97f9F733798833510083d9f432296b6DD00"
+  );
+
+  const { data: projectOnchainData, isLoading: isLoadingProjectOnchainData } =
+    useContractRead(contract, "projects", projectId);
 
   useEffect(() => {
     if (!projectId) return;
@@ -80,11 +93,40 @@ export default function ProjectDetail() {
     fetch();
   }, [projectId, db]);
 
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const handleModalClick = (betPosition: boolean) => {
+    setBetPosition(betPosition);
+    onOpen();
+  };
+
   return (
     <AdminLayout>
       <Box pt={{ base: "130px", md: "80px", xl: "80px" }}>
         <>
           <Heading mb="4">{projectData?.name}</Heading>
+          <BetModal
+            title=""
+            isOpen={isOpen}
+            onClose={onClose}
+            projectId={projectId as string}
+            betPosition={betPosition}
+            sponsored={Number(
+              ethers.utils.formatEther(
+                projectOnchainData?.sponsored.toString() || "0"
+              )
+            )}
+            totalBetOnFailure={Number(
+              ethers.utils.formatEther(
+                projectOnchainData?.totalBetOnFailure.toString() || "0"
+              )
+            )}
+            totalBetOnSuccess={Number(
+              ethers.utils.formatEther(
+                projectOnchainData?.totalBetOnSuccess.toString() || "0"
+              )
+            )}
+          />
           <SimpleGrid
             columns={{ base: 1, md: 2, lg: 2, "2xl": 3 }}
             gap="20px"
@@ -93,8 +135,68 @@ export default function ProjectDetail() {
             <General description={projectData?.description} />
             <SimpleGrid columns={{ base: 1, md: 2, xl: 2 }} gap="20px">
               <DailyTraffic />
-              <PieCard />
+              {isLoadingProjectOnchainData ? (
+                <></>
+              ) : (
+                <PieCard
+                  sponsored={Number(
+                    ethers.utils.formatEther(
+                      projectOnchainData?.sponsored.toString() || "0"
+                    )
+                  )}
+                  totalBetOnFailure={Number(
+                    ethers.utils.formatEther(
+                      projectOnchainData?.totalBetOnFailure.toString() || "0"
+                    )
+                  )}
+                  totalBetOnSuccess={Number(
+                    ethers.utils.formatEther(
+                      projectOnchainData?.totalBetOnSuccess.toString() || "0"
+                    )
+                  )}
+                />
+              )}
             </SimpleGrid>
+          </SimpleGrid>
+          <SimpleGrid
+            columns={{ base: 1, md: 2, lg: 2, "2xl": 3 }}
+            gap="20px"
+            mb="20px"
+          >
+            <Button
+              colorScheme="red"
+              bgColor="red.400"
+              color="white"
+              fontSize="sm"
+              fontWeight="500"
+              borderRadius="70px"
+              px="24px"
+              py="5px"
+              onClick={() => {
+                handleModalClick(false);
+              }}
+            >
+              Place Bid for Failure
+            </Button>
+            <Button
+              colorScheme="green"
+              bgColor="green.400"
+              color="white"
+              fontSize="sm"
+              fontWeight="500"
+              borderRadius="70px"
+              px="24px"
+              py="5px"
+              onClick={() => {
+                handleModalClick(true);
+              }}
+            >
+              Place Bid for Success{" "}
+              {projectOnchainData &&
+                ethers.utils.formatEther(
+                  projectOnchainData?.totalBetOnSuccess.toString()
+                )}
+            </Button>
           </SimpleGrid>
 
           <SimpleGrid
@@ -208,7 +310,7 @@ export default function ProjectDetail() {
               columnsData={columnsDataComplex}
               tableData={tableDataComplex as unknown as TableData[]}
             />
-            <SimpleGrid columns={{ base: 1, md: 2, xl: 2 }} gap="20px">
+            <SimpleGrid columns={{ base: 1, md: 1, xl: 1 }} gap="20px">
               <Tasks />
               {/* <MiniCalendar h="100%" minW="100%" selectRange={false} /> */}
             </SimpleGrid>

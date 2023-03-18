@@ -75,6 +75,7 @@ export default function NftMarketplace() {
     };
     fetch();
   }, [db]);
+
   return (
     <AdminLayout>
       <Box pt={{ base: "180px", md: "80px", xl: "80px" }}>
