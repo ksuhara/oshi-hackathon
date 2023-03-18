@@ -39,10 +39,6 @@ import HistoryItem from "views/admin/marketplace/components/HistoryItem";
 
 // Assets
 import { collection, getDocs, query, where } from "@firebase/firestore";
-import Avatar1 from "img/avatars/avatar1.png";
-import Avatar2 from "img/avatars/avatar2.png";
-import Avatar3 from "img/avatars/avatar3.png";
-import Avatar4 from "img/avatars/avatar4.png";
 import Nft1 from "img/nfts/Nft1.png";
 import Nft2 from "img/nfts/Nft2.png";
 import Nft3 from "img/nfts/Nft3.png";
@@ -155,16 +151,6 @@ export default function NftMarketplace() {
                 <NFT
                   name="Abstract Colors"
                   author="By Esthera Jackson"
-                  bidders={[
-                    Avatar1,
-                    Avatar2,
-                    Avatar3,
-                    Avatar4,
-                    Avatar1,
-                    Avatar1,
-                    Avatar1,
-                    Avatar1,
-                  ]}
                   image={Nft1}
                   currentbid="0.91 ETH"
                   download="#"
@@ -172,16 +158,6 @@ export default function NftMarketplace() {
                 <NFT
                   name="ETH AI Brain"
                   author="By Nick Wilson"
-                  bidders={[
-                    Avatar1,
-                    Avatar2,
-                    Avatar3,
-                    Avatar4,
-                    Avatar1,
-                    Avatar1,
-                    Avatar1,
-                    Avatar1,
-                  ]}
                   image={Nft2}
                   currentbid="0.91 ETH"
                   download="#"
@@ -189,16 +165,6 @@ export default function NftMarketplace() {
                 <NFT
                   name="Mesh Gradients "
                   author="By Will Smith"
-                  bidders={[
-                    Avatar1,
-                    Avatar2,
-                    Avatar3,
-                    Avatar4,
-                    Avatar1,
-                    Avatar1,
-                    Avatar1,
-                    Avatar1,
-                  ]}
                   image={Nft3}
                   currentbid="0.91 ETH"
                   download="#"
@@ -228,41 +194,17 @@ export default function NftMarketplace() {
                   On-Going Projects
                 </Text>
               </Flex>
-              {projectsData?.map((project) => {
+              {projectsData?.map((project, index) => {
                 return (
                   <HistoryItem
                     key={project.uid}
                     name={project.name}
-                    author="By Mark Benjamin"
                     date={project.goalDate.toDate().toLocaleDateString()}
-                    image={Nft5}
-                    price="0.91 ETH"
-                    winOdds={1.3}
-                    loseOdds={4.2}
+                    image={index % 2 == 1 ? Nft5 : Nft1}
                     projectId={project.uid}
                   />
                 );
               })}
-              <HistoryItem
-                name="Abstract Colors"
-                author="By Esthera Jackson"
-                date="58s ago"
-                image={Nft1}
-                price="0.91 ETH"
-                winOdds={1.3}
-                loseOdds={4.2}
-                projectId={"2"}
-              />
-              <HistoryItem
-                name="ETH AI Brain"
-                author="By Nick Wilson"
-                date="1m ago"
-                image={Nft2}
-                price="0.91 ETH"
-                winOdds={1.3}
-                loseOdds={4.2}
-                projectId={"3"}
-              />
             </Card>
           </Flex>
         </Grid>

@@ -1,4 +1,5 @@
 // Chakra imports
+import { CalendarIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
@@ -8,25 +9,22 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
+
 import { useContract, useContractRead } from "@thirdweb-dev/react";
 // Custom components
 import Card from "components/card/Card";
 // Assets
 import { Image } from "components/image/Image";
-import { FaEthereum } from "react-icons/fa";
+import { ethers } from "ethers";
+import { FaDollarSign } from "react-icons/fa";
 
 export default function NFT(props: {
   image: string;
   name: string;
-  author: string;
   date: string;
-  price: string | number;
-  winOdds: string | number;
-  loseOdds: string | number;
   projectId: string;
 }) {
-  const { image, name, author, date, price, winOdds, loseOdds, projectId } =
-    props;
+  const { image, name, date, projectId } = props;
   // Chakra Color Mode
   const textColor = useColorModeValue("brands.900", "white");
   const bgItem = useColorModeValue(
@@ -40,6 +38,19 @@ export default function NFT(props: {
   );
 
   const { data } = useContractRead(contract, "projects", projectId);
+
+  const formattedSuccess = Number(
+    ethers.utils.formatEther(data?.totalBetOnSuccess.toString() || "0")
+  );
+  const formattedFailure = Number(
+    ethers.utils.formatEther(data?.totalBetOnFailure.toString() || "0")
+  );
+  const formattedSponsored = Number(
+    ethers.utils.formatEther(data?.sponsored.toString() || "0")
+  );
+  const totalPod = formattedSuccess + formattedFailure + formattedSponsored;
+  const winOdds = (totalPod + 1) / (formattedSuccess + 1);
+  const loseOdds = (totalPod + 1) / (formattedFailure + 1);
 
   return (
     <Card
@@ -85,7 +96,7 @@ export default function NFT(props: {
               fontWeight="400"
               me="14px"
             >
-              by {data?.creator}
+              by {data?.creator.substring(0, 12) + "..."}
             </Text>
           </Flex>
           <Button
@@ -94,11 +105,11 @@ export default function NFT(props: {
             color="white"
             fontSize="sm"
             fontWeight="500"
-            borderRadius="70px"
-            px="24px"
+            borderRadius={{ base: "10px", lg: "70px" }}
+            px={{ base: "0px", md: "24px" }}
             py="5px"
           >
-            × {data?.totalBetOnSuccess.toString()}
+            × {parseFloat(winOdds.toFixed(2))}
           </Button>
           <Button
             variant="darkBrand"
@@ -106,31 +117,39 @@ export default function NFT(props: {
             color="white"
             fontSize="sm"
             fontWeight="500"
-            borderRadius="70px"
-            px="24px"
+            borderRadius={{ base: "10px", lg: "70px" }}
+            px={{ base: "0px", md: "24px" }}
             py="5px"
             mx="4"
           >
-            × {loseOdds}
+            × {parseFloat(loseOdds.toFixed(2))}
           </Button>
           <Flex
             w="max-content"
             me={{ base: "4px", md: "32px", xl: "10px", "3xl": "32px" }}
             align="center"
+            display={{ base: "none", md: "flex" }}
           >
-            <Icon as={FaEthereum} color={textColor} width="9px" me="7px" />
+            <Icon as={FaDollarSign} color={textColor} width="9px" me="7px" />
             <Text
               w="max-content"
               fontWeight="700"
               fontSize="md"
               color={textColor}
             >
-              {price}
+              {totalPod}
+            </Text>
+            <Icon
+              as={CalendarIcon}
+              color={textColor}
+              width="9px"
+              me="7px"
+              ml="4"
+            />
+            <Text fontWeight="700" color={textColor} w="24">
+              {date}
             </Text>
           </Flex>
-          <Text fontWeight="700" color={textColor} w="24">
-            {date}
-          </Text>
         </Flex>
       </Flex>
     </Card>
