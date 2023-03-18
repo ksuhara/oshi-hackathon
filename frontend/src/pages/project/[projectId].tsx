@@ -100,6 +100,23 @@ export default function ProjectDetail() {
     onOpen();
   };
 
+  const formattedSuccess = Number(
+    ethers.utils.formatEther(
+      projectOnchainData?.totalBetOnSuccess.toString() || "0"
+    )
+  );
+  const formattedFailure = Number(
+    ethers.utils.formatEther(
+      projectOnchainData?.totalBetOnFailure.toString() || "0"
+    )
+  );
+  const formattedSponsored = Number(
+    ethers.utils.formatEther(projectOnchainData?.sponsored.toString() || "0")
+  );
+  const totalPod = formattedSuccess + formattedFailure + formattedSponsored;
+  const winOdds = (totalPod + 1) / (formattedSuccess + 1);
+  const loseOdds = (totalPod + 1) / (formattedFailure + 1);
+
   return (
     <AdminLayout>
       <Box pt={{ base: "130px", md: "80px", xl: "80px" }}>
@@ -111,21 +128,9 @@ export default function ProjectDetail() {
             onClose={onClose}
             projectId={projectId as string}
             betPosition={betPosition}
-            sponsored={Number(
-              ethers.utils.formatEther(
-                projectOnchainData?.sponsored.toString() || "0"
-              )
-            )}
-            totalBetOnFailure={Number(
-              ethers.utils.formatEther(
-                projectOnchainData?.totalBetOnFailure.toString() || "0"
-              )
-            )}
-            totalBetOnSuccess={Number(
-              ethers.utils.formatEther(
-                projectOnchainData?.totalBetOnSuccess.toString() || "0"
-              )
-            )}
+            sponsored={formattedSponsored}
+            totalBetOnFailure={formattedFailure}
+            totalBetOnSuccess={formattedSuccess}
           />
           <SimpleGrid
             columns={{ base: 1, md: 2, lg: 2, "2xl": 3 }}
@@ -139,21 +144,9 @@ export default function ProjectDetail() {
                 <></>
               ) : (
                 <PieCard
-                  sponsored={Number(
-                    ethers.utils.formatEther(
-                      projectOnchainData?.sponsored.toString() || "0"
-                    )
-                  )}
-                  totalBetOnFailure={Number(
-                    ethers.utils.formatEther(
-                      projectOnchainData?.totalBetOnFailure.toString() || "0"
-                    )
-                  )}
-                  totalBetOnSuccess={Number(
-                    ethers.utils.formatEther(
-                      projectOnchainData?.totalBetOnSuccess.toString() || "0"
-                    )
-                  )}
+                  sponsored={formattedSponsored}
+                  totalBetOnFailure={formattedFailure}
+                  totalBetOnSuccess={formattedSuccess}
                 />
               )}
             </SimpleGrid>
@@ -176,7 +169,7 @@ export default function ProjectDetail() {
                 handleModalClick(false);
               }}
             >
-              Place Bid for Failure
+              Place Bid for Failure × {parseFloat(loseOdds.toFixed(2))}
             </Button>
             <Button
               colorScheme="green"
@@ -191,11 +184,7 @@ export default function ProjectDetail() {
                 handleModalClick(true);
               }}
             >
-              Place Bid for Success{" "}
-              {projectOnchainData &&
-                ethers.utils.formatEther(
-                  projectOnchainData?.totalBetOnSuccess.toString()
-                )}
+              Place Bid for Success × {parseFloat(winOdds.toFixed(2))}
             </Button>
           </SimpleGrid>
 
@@ -204,6 +193,25 @@ export default function ProjectDetail() {
             gap="20px"
             mb="20px"
           >
+            <MiniStatistics
+              startContent={
+                <IconBox
+                  w="56px"
+                  h="56px"
+                  bg={boxBg}
+                  icon={
+                    <Icon
+                      w="32px"
+                      h="32px"
+                      as={MdAttachMoney}
+                      color={brandColor}
+                    />
+                  }
+                />
+              }
+              name="Total Pod"
+              value={`$${parseFloat(totalPod.toFixed(2))}`}
+            />
             <MiniStatistics
               startContent={
                 <IconBox
@@ -223,25 +231,7 @@ export default function ProjectDetail() {
               name="Earnings"
               value="$350.4"
             />
-            <MiniStatistics
-              startContent={
-                <IconBox
-                  w="56px"
-                  h="56px"
-                  bg={boxBg}
-                  icon={
-                    <Icon
-                      w="32px"
-                      h="32px"
-                      as={MdAttachMoney}
-                      color={brandColor}
-                    />
-                  }
-                />
-              }
-              name="Spend this month"
-              value="$642.39"
-            />
+
             <MiniStatistics growth="+23%" name="Sales" value="$574.34" />
             <MiniStatistics
               endContent={

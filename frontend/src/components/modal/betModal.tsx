@@ -112,7 +112,7 @@ export default function BetModal(props: {
           />
           <Text>
             Expected Payout:{" "}
-            <span style={{ color: "#2F855A" }}>{expected}</span>
+            <span style={{ color: "#2F855A" }}>{expected}</span> USDC
           </Text>
           {isApproved ? (
             <Button
