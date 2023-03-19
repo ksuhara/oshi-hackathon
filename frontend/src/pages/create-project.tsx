@@ -25,6 +25,7 @@ export default function CreateProject() {
   const [projectName, setProjectName] = useState("");
   const [description, setDescription] = useState("");
   const [projectGoal, setProjectGoal] = useState("");
+  const [sponsorBudget, setSponsorBudget] = useState("0");
   const [goalDate, setGoalDate] = useState(new Date());
   const [isTxLoading, setIsTxLoading] = useState(false);
 
@@ -59,6 +60,12 @@ export default function CreateProject() {
     setGoalDate(date);
   };
 
+  const handleSponsorBudgetChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setSponsorBudget(event.target.value);
+  };
+
   const handleCreateProject = async () => {
     if (
       !projectName ||
@@ -71,7 +78,9 @@ export default function CreateProject() {
     setIsTxLoading(true);
     const nextNumber = projectCounter.toNumber() + 1;
     try {
-      const data = await createProject([ethers.utils.parseEther("100")]);
+      const data = await createProject([
+        ethers.utils.parseEther(sponsorBudget),
+      ]);
       console.info("contract call successs", data);
     } catch (err) {
       console.error("contract call failure", err);
@@ -162,6 +171,14 @@ export default function CreateProject() {
 
               <ChakraDatePicker onChange={handleDateChange}></ChakraDatePicker>
             </Box>
+            <InputField
+              type="number"
+              mb="20px"
+              id="2"
+              label="Sponsor Budget (USDC)"
+              placeholder="$100"
+              onChange={handleSponsorBudgetChange}
+            />
             <Button
               variant="brand"
               onClick={handleCreateProject}
