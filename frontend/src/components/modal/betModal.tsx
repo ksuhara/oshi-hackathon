@@ -8,11 +8,16 @@ import {
   ModalHeader,
   ModalOverlay,
   Text,
+  useToast,
 } from "@chakra-ui/react";
+import { doc, updateDoc } from "@firebase/firestore";
 import { useContract, useContractWrite } from "@thirdweb-dev/react";
 import InputField from "components/fields/InputField";
 import { ethers } from "ethers";
+import { serverTimestamp } from "firebase/firestore";
+import useFirebaseUser from "hooks/useFirebaseUser";
 import { ERC20ContractAddress, PaddockContractAddress } from "lib/constant";
+import initializeFirebaseClient from "lib/initFirebase";
 import { useState } from "react";
 
 export default function BetModal(props: {
@@ -23,6 +28,7 @@ export default function BetModal(props: {
   totalBetOnSuccess: number;
   totalBetOnFailure: number;
   sponsored: number;
+  comments: any[];
   onClose: () => void;
 }) {
   const {
@@ -34,9 +40,15 @@ export default function BetModal(props: {
     totalBetOnSuccess,
     totalBetOnFailure,
     sponsored,
+    comments,
   } = props;
 
   const [amount, setAmount] = useState("0");
+  const [comment, setComment] = useState("");
+
+  const { db } = initializeFirebaseClient();
+  const { user, isLoading: loadingAuth } = useFirebaseUser();
+  const toast = useToast();
 
   const [isApproved, setIsApproved] = useState(false);
   const [isTxLoading, setIsTxLoading] = useState(false);
@@ -67,6 +79,16 @@ export default function BetModal(props: {
         ethers.utils.parseEther(amount),
       ]);
       console.info("contract call successs", data);
+      const docRef = doc(db, "projects", projectId);
+      await updateDoc(docRef, {
+        comments: [...comments, { comment, betPosition, user: user.uid }],
+        updatedAt: serverTimestamp(),
+      });
+      toast({
+        title: "Successfully Bet!",
+        status: "success",
+        isClosable: true,
+      });
     } catch (err) {
       console.error("contract call failure", err);
     }
@@ -92,6 +114,10 @@ export default function BetModal(props: {
     setAmount(event.target.value);
   };
 
+  const handleCommentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setComment(event.target.value);
+  };
+
   return (
     <Modal onClose={onClose} isOpen={isOpen}>
       <ModalOverlay />
@@ -107,9 +133,17 @@ export default function BetModal(props: {
             placeholder="USDC"
             onChange={handleAmountChange}
           />
+          <InputField
+            type="stirng"
+            mb="20px"
+            id="2"
+            label="Comment"
+            placeholder="Please write your reason"
+            onChange={handleCommentChange}
+          />
           <Text>
             Expected Payout:{" "}
-            <span style={{ color: "#2F855A" }}>{expected}</span> USDC
+            <span style={{ color: "#2F855A" }}>{expected || "0"}</span> USDC
           </Text>
           {isApproved ? (
             <Button

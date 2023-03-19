@@ -23,45 +23,31 @@
 import {
   Box,
   Button,
-  Flex,
-  FormLabel,
   Heading,
   Icon,
-  Select,
   SimpleGrid,
   useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
 import { doc, getDoc } from "@firebase/firestore";
-import { useContract, useContractRead } from "@thirdweb-dev/react";
+import { useAddress, useContract, useContractRead } from "@thirdweb-dev/react";
+import Card from "components/card/Card";
 // Assets
 // Custom components
 import MiniStatistics from "components/card/MiniStatistics";
 import IconBox from "components/icons/IconBox";
-import { Image } from "components/image/Image";
 import BetModal from "components/modal/betModal";
 import { ethers } from "ethers";
-import Usa from "img/dashboards/usa.png";
 import AdminLayout from "layouts/admin";
 import { PaddockContractAddress } from "lib/constant";
 import initializeFirebaseClient from "lib/initFirebase";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import {
-  MdAddTask,
-  MdAttachMoney,
-  MdBarChart,
-  MdFileCopy,
-} from "react-icons/md";
-import ComplexTable from "views/admin/default/components/ComplexTable";
+import { MdAttachMoney, MdBarChart } from "react-icons/md";
 import DailyTraffic from "views/admin/default/components/DailyTraffic";
 import PieCard from "views/admin/default/components/PieCard";
-import Tasks from "views/admin/default/components/Tasks";
-import {
-  columnsDataComplex,
-  TableData,
-} from "views/admin/default/variables/columnsData";
-import tableDataComplex from "views/admin/default/variables/tableDataComplex.json";
+import CommentsTable from "views/admin/marketplace/components/Comments";
+import { tableColumnsTopCreators } from "views/admin/marketplace/variables/tableColumnsTopCreators";
 import General from "views/admin/profile/components/General";
 
 export default function ProjectDetail() {
@@ -74,11 +60,18 @@ export default function ProjectDetail() {
   const { db } = initializeFirebaseClient();
   const [projectData, setProjectData] = useState<any>();
   const [betPosition, setBetPosition] = useState(true);
+  const address = useAddress();
 
   const { contract } = useContract(PaddockContractAddress);
 
   const { data: projectOnchainData, isLoading: isLoadingProjectOnchainData } =
     useContractRead(contract, "projects", projectId);
+
+  const { data: betsOnSuccess, isLoading: isLoadingBetsOnSuccess } =
+    useContractRead(contract, "betsOnSuccess", projectId, address);
+
+  const { data: betsOnFailure, isLoading: isLoadingBetsOnFailure } =
+    useContractRead(contract, "betsOnFailure", projectId, address);
 
   useEffect(() => {
     if (!projectId) return;
@@ -112,9 +105,22 @@ export default function ProjectDetail() {
   const formattedSponsored = Number(
     ethers.utils.formatEther(projectOnchainData?.sponsored.toString() || "0")
   );
+
+  const formattedYourBetsOnSuccess = Number(
+    ethers.utils.formatEther(betsOnSuccess?.toString() || "0")
+  );
+
+  const formattedYourBetsOnFailure = Number(
+    ethers.utils.formatEther(betsOnSuccess?.toString() || "0")
+  );
+
   const totalPod = formattedSuccess + formattedFailure + formattedSponsored;
   const winOdds = (totalPod + 1) / (formattedSuccess + 1);
   const loseOdds = (totalPod + 1) / (formattedFailure + 1);
+  const currentPayoutIfSuccess =
+    totalPod / (formattedYourBetsOnSuccess / formattedSuccess);
+  const currentPayoutIfFailure =
+    totalPod / (formattedYourBetsOnFailure / formattedFailure);
 
   return (
     <AdminLayout>
@@ -130,6 +136,7 @@ export default function ProjectDetail() {
             sponsored={formattedSponsored}
             totalBetOnFailure={formattedFailure}
             totalBetOnSuccess={formattedSuccess}
+            comments={projectData?.comments}
           />
           <SimpleGrid
             columns={{ base: 1, md: 2, lg: 2, "2xl": 3 }}
@@ -209,6 +216,7 @@ export default function ProjectDetail() {
                 />
               }
               name="Total Pod"
+              growth="+23%"
               value={`$${parseFloat(totalPod.toFixed(2))}`}
             />
             <MiniStatistics
@@ -227,83 +235,38 @@ export default function ProjectDetail() {
                   }
                 />
               }
-              name="Earnings"
-              value="$350.4"
+              name="Bidders"
+              value="8"
             />
-
-            <MiniStatistics growth="+23%" name="Sales" value="$574.34" />
-            <MiniStatistics
-              endContent={
-                <Flex me="-16px" mt="10px">
-                  <FormLabel htmlFor="balance">
-                    <Box boxSize={"12"}>
-                      <Image src={Usa} alt="" w={"100%"} h={"100%"} />
-                    </Box>
-                  </FormLabel>
-                  <Select
-                    id="balance"
-                    variant="mini"
-                    mt="5px"
-                    me="0px"
-                    defaultValue="usd"
-                  >
-                    <option value="usd">USD</option>
-                    <option value="eur">EUR</option>
-                    <option value="gba">GBA</option>
-                  </Select>
-                </Flex>
-              }
-              name="Your balance"
-              value="$1,000"
-            />
-            <MiniStatistics
-              startContent={
-                <IconBox
-                  w="56px"
-                  h="56px"
-                  bg="linear-gradient(90deg, #4481EB 0%, #04BEFE 100%)"
-                  icon={<Icon w="28px" h="28px" as={MdAddTask} color="white" />}
-                />
-              }
-              name="New Tasks"
-              value="154"
-            />
-            <MiniStatistics
-              startContent={
-                <IconBox
-                  w="56px"
-                  h="56px"
-                  bg={boxBg}
-                  icon={
-                    <Icon
-                      w="32px"
-                      h="32px"
-                      as={MdFileCopy}
-                      color={brandColor}
-                    />
-                  }
-                />
-              }
-              name="Total Projects"
-              value="2935"
-            />
+            {currentPayoutIfSuccess > currentPayoutIfFailure ? (
+              <MiniStatistics
+                name="Your position"
+                value={
+                  address
+                    ? `$ ${formattedYourBetsOnSuccess} → $ ${currentPayoutIfSuccess}`
+                    : "-"
+                }
+              />
+            ) : (
+              <MiniStatistics
+                name="Your position"
+                value={
+                  address
+                    ? `$ ${formattedYourBetsOnFailure} → $ ${formattedYourBetsOnFailure}`
+                    : "-"
+                }
+              />
+            )}
           </SimpleGrid>
-          <SimpleGrid columns={{ base: 1, md: 1, xl: 2 }} gap="20px" mb="20px">
-            {/* <CheckTable
-              columnsData={columnsDataCheck}
-              tableData={tableDataCheck as unknown as TableData[]}
-            /> */}
-          </SimpleGrid>
-          <SimpleGrid columns={{ base: 1, md: 1, xl: 2 }} gap="20px" mb="20px">
-            <ComplexTable
-              columnsData={columnsDataComplex}
-              tableData={tableDataComplex as unknown as TableData[]}
-            />
-            <SimpleGrid columns={{ base: 1, md: 1, xl: 1 }} gap="20px">
-              <Tasks />
-              {/* <MiniCalendar h="100%" minW="100%" selectRange={false} /> */}
-            </SimpleGrid>
-          </SimpleGrid>
+          <Card px="0px" mb="20px">
+            {projectData?.comments && (
+              <CommentsTable
+                outcome={projectOnchainData?.outcome}
+                tableData={projectData?.comments as any}
+                columnsData={tableColumnsTopCreators}
+              />
+            )}
+          </Card>
         </>
       </Box>
     </AdminLayout>
