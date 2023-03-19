@@ -12,6 +12,7 @@ import {
 import { useContract, useContractWrite } from "@thirdweb-dev/react";
 import InputField from "components/fields/InputField";
 import { ethers } from "ethers";
+import { ERC20ContractAddress, PaddockContractAddress } from "lib/constant";
 import { useState } from "react";
 
 export default function BetModal(props: {
@@ -40,13 +41,9 @@ export default function BetModal(props: {
   const [isApproved, setIsApproved] = useState(false);
   const [isTxLoading, setIsTxLoading] = useState(false);
 
-  const { contract } = useContract(
-    "0x0BB2c97f9F733798833510083d9f432296b6DD00"
-  );
+  const { contract } = useContract(PaddockContractAddress);
 
-  const { contract: erc20Token } = useContract(
-    "0xBE0F4D98cdDa6B7e93faC1Fb15c99197a1fb7919"
-  );
+  const { contract: erc20Token } = useContract(ERC20ContractAddress);
 
   const { mutateAsync: betOnProject } = useContractWrite(
     contract,
@@ -80,7 +77,7 @@ export default function BetModal(props: {
     setIsTxLoading(true);
     try {
       const data = await approve([
-        "0x0BB2c97f9F733798833510083d9f432296b6DD00",
+        PaddockContractAddress,
         ethers.utils.parseEther(amount),
       ]);
       setIsApproved(true);

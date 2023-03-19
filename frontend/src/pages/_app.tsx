@@ -1,5 +1,6 @@
 import { ChakraProvider } from "@chakra-ui/react";
 import { ChainId, ThirdwebProvider } from "@thirdweb-dev/react";
+// import {Astar} from "@thirdweb-dev/chains"
 import { AppProps } from "next/app";
 import React from "react";
 import theme from "theme/theme";

@@ -16,6 +16,7 @@ import Card from "components/card/Card";
 // Assets
 import { Image } from "components/image/Image";
 import { ethers } from "ethers";
+import { PaddockContractAddress } from "lib/constant";
 import { FaDollarSign } from "react-icons/fa";
 
 export default function NFT(props: {
@@ -33,9 +34,7 @@ export default function NFT(props: {
   );
   const textColorDate = useColorModeValue("secondaryGray.600", "white");
 
-  const { contract } = useContract(
-    "0x0BB2c97f9F733798833510083d9f432296b6DD00"
-  );
+  const { contract } = useContract(PaddockContractAddress);
 
   const { data } = useContractRead(contract, "projects", projectId);
 

@@ -43,6 +43,7 @@ import BetModal from "components/modal/betModal";
 import { ethers } from "ethers";
 import Usa from "img/dashboards/usa.png";
 import AdminLayout from "layouts/admin";
+import { PaddockContractAddress } from "lib/constant";
 import initializeFirebaseClient from "lib/initFirebase";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -74,9 +75,7 @@ export default function ProjectDetail() {
   const [projectData, setProjectData] = useState<any>();
   const [betPosition, setBetPosition] = useState(true);
 
-  const { contract } = useContract(
-    "0x0BB2c97f9F733798833510083d9f432296b6DD00"
-  );
+  const { contract } = useContract(PaddockContractAddress);
 
   const { data: projectOnchainData, isLoading: isLoadingProjectOnchainData } =
     useContractRead(contract, "projects", projectId);

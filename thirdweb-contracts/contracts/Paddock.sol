@@ -35,17 +35,16 @@ contract Paddock {
     token = _token;
   }
 
-  function createProject() public {
+  function createProject(uint256 _budget) public {
     projectCounter++;
-    projects[projectCounter] = Project(msg.sender, 0, 0, 0, Outcome.Undecided, false);
-    // Transfer the budget to the contract
+    projects[projectCounter] = Project(msg.sender, _budget, 0, 0, Outcome.Undecided, false);
   }
 
-  function depositToProject(uint256 _projectId, uint256 _budget) public payable {
+  function depositToProject(uint256 _projectId, uint256 _budget) public {
     Project storage project = projects[_projectId];
     require(project.creator != address(0), "Project not found.");
     require(project.outcome == Outcome.Undecided, "Project outcome has been decided.");
-    require(token.transferFrom(msg.sender, address(this), _budget));
+    token.transferFrom(msg.sender, address(this), _budget);
     project.sponsored += _budget;
   }
 

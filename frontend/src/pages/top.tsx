@@ -112,21 +112,21 @@ export default function NftMarketplace() {
                   author="By Esthera Jackson"
                   image={Nft1}
                   currentbid="0.91 ETH"
-                  download="#"
+                  download={`project/${1}`}
                 />
                 <NFT
                   name="ETH AI Brain"
                   author="By Nick Wilson"
                   image={Nft2}
                   currentbid="0.91 ETH"
-                  download="#"
+                  download={`project/${2}`}
                 />
                 <NFT
                   name="Mesh Gradients "
                   author="By Will Smith"
                   image={Nft3}
                   currentbid="0.91 ETH"
-                  download="#"
+                  download={`project/${3}`}
                 />
               </SimpleGrid>
             </Flex>

@@ -15,7 +15,9 @@ import {
 import Card from "components/card/Card";
 import ChakraDatePicker from "components/datePicker/datePicker";
 import InputField from "components/fields/InputField";
+import { ethers } from "ethers";
 import AdminLayout from "layouts/admin";
+import { PaddockContractAddress } from "lib/constant";
 import { useState } from "react";
 
 export default function CreateProject() {
@@ -27,9 +29,7 @@ export default function CreateProject() {
   const [isTxLoading, setIsTxLoading] = useState(false);
 
   const toast = useToast();
-  const { contract } = useContract(
-    "0x0BB2c97f9F733798833510083d9f432296b6DD00"
-  );
+  const { contract } = useContract(PaddockContractAddress);
   const { data: projectCounter } = useContractRead(contract, "projectCounter");
 
   const { mutateAsync: createProject } = useContractWrite(
@@ -71,7 +71,7 @@ export default function CreateProject() {
     setIsTxLoading(true);
     const nextNumber = projectCounter.toNumber() + 1;
     try {
-      const data = await createProject([]);
+      const data = await createProject([ethers.utils.parseEther("100")]);
       console.info("contract call successs", data);
     } catch (err) {
       console.error("contract call failure", err);
