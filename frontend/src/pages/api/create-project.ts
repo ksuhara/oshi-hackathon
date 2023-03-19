@@ -16,6 +16,7 @@ export default async function handler(
     description,
     name,
     goal,
+    comments: [],
     goalDate: new Date(goalDate),
     createdAt: new Date(),
     updatedAt: new Date(),
